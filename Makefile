@@ -1,14 +1,13 @@
 $(info Set these environment variables and delete this message)
-CFLAGS=
-LDFLAGS=
-LDLIBS=
-ARFLAGS=
+CC = gcc
+CFLAGS = -std=c99 -W -Wall
+CFLAGSS = -std=c99 -W
+LIBS = -lm
 
 all: libdatastructs.a test
 
 %.o : %.c
-	$(error You must implement a rule to make \
-		object files from source files)
+	$(CC) $(CFLAGS) $< -c
 
 libdatastructs.a:
 	$(error You must implement the libdatastructs.a rule and delete this message)
@@ -24,7 +23,7 @@ test:
 # created using student files as prerequisites
 .PHONY: clean
 clean:
-	$(error You must implement the clean rule and delete this message)
+	rm -f *.exe *.o all
 
 # Secret grader Makefile additions ;)
 # Just kidding! It's not secret, but you can safely ignore it.
