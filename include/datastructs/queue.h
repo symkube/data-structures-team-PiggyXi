@@ -29,9 +29,9 @@ void del_Queue(Queue *q);
 Queue *copy_Queue(Queue *q);
 
 
-void clear_Queue(Queue *q);
-void enqueue_Queue(Queue *q, Data d);
-Data dequeue_Queue(Queue *q);
-Data peek_Queue(Queue *q);
+void clear(Queue *q);
+void enqueue(Queue *q, Data d);
+Data dequeue(Queue *q);
+Data peek(Queue *q);
 
 #endif // DATASTRUCTS_QUEUE_H

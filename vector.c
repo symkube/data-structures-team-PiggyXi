@@ -9,14 +9,29 @@
 ///
 /// @return     { Return a pointer to the vector }
 ///
-Vector *new_Vector(size_t size) { return NULL; }
+Vector *new_Vector(size_t size) { 
+    Vector * P_vec;
+    P_vec = (Vector *)malloc(sizeof(Vector));
+    P_vec -> len = 0;
+    P_vec -> size = size;
+    P_vec -> array = (Data *)malloc( sizeof(Data) * size );
+    memset(P_vec -> array, 0, sizeof(Data) * size );
+    P_vec -> used = malloc( sizeof(bool) * size );
+    memset(P_vec -> used, 0, sizeof(bool) * size );
+    return P_vec; 
+}
 
 ///
 /// @brief      { Delete an existing vector }
 ///
 /// @param      v     { Pointer to the vector to be deleted. If v is null, no operation is performed }
 ///
-void del_Vector(Vector *v) { return NULL; }
+void del_Vector(Vector *v) { 
+    free(v->array);
+    free(v->used);
+    free(v);
+    return; 
+}
 
 ///
 /// @brief      { Copies the contents of a vector into a new vector }
@@ -26,7 +41,17 @@ void del_Vector(Vector *v) { return NULL; }
 /// @return     { Returns a pointer to the newly copied vector on success,
 /// 			  or a null pointer on failure. }
 ///
-Vector *copy_Vector(Vector *v) { return NULL; }
+Vector *copy_Vector(Vector *v) { 
+    Vector * P_newvec;
+    P_newvec = (Vector *)malloc(sizeof(Vector));
+    P_newvec -> len = v -> len;
+    P_newvec -> size = v -> size;
+    P_newvec -> array = (Data *)malloc( sizeof(Data) * P_newvec -> size );
+    memcpy( P_newvec -> array , v -> array , sizeof(Data) * P_newvec -> size );
+    P_newvec -> used = malloc( sizeof(bool) * P_newvec -> size  );
+    memcpy( P_newvec -> used , v -> used , sizeof(bool) * P_newvec -> size );
+    return P_newvec; 
+}
 
 ///
 /// @brief      Get the element from the vector at an index
@@ -38,7 +63,12 @@ Vector *copy_Vector(Vector *v) { return NULL; }
 ///               or a null pointer on failure (e.g. the index is out of bounds 
 ///               or the element is not marked used.) }
 ///
-Data *at_Vector(struct Vector *v, size_t index) { return NULL; }
+Data *at_Vector(struct Vector *v, size_t index) { 
+    if( index >= (v->len) || (v->used)[index] == false ){
+        return NULL;
+    }
+    return (v->array)[index]; 
+}
 
 ///
 /// @brief      { Insert an element into the vector at an index. 
@@ -52,7 +82,17 @@ Data *at_Vector(struct Vector *v, size_t index) { return NULL; }
 /// @param[in]  d      { The data to be stored in the vector }
 /// @param[in]  index  The index of the element to contain the data item.
 ///
-void insert_Vector(struct Vector *v, Data d, size_t index) {}
+void insert_Vector(struct Vector *v, Data d, size_t index) {
+    while( index > (v->size) ){
+        resize_Vector( v, 2*(v->size) );
+    }
+    (v->array)[index] = d;
+    (v->used)[index] = true;
+    if((v->len)< index ){
+        v->len = index;
+    }
+    return ;
+}
 
 ///
 /// @brief      { Resize the vector storage. 
@@ -62,7 +102,19 @@ void insert_Vector(struct Vector *v, Data d, size_t index) {}
 /// @param      v     { The vector whose storage will be resized }
 /// @param[in]  size  The new storage size
 ///
-void resize_Vector(struct Vector *v, size_t size) {}
+void resize_Vector(struct Vector *v, size_t size) {
+    Vector * P_newarr = malloc( sizeof(Data) * size );
+    if( P_newarr == NULL ) {
+        exit(1);
+    }else{
+        memset(P_newarr , 0, sizeof(Data) * size );
+        memcpy( v->array , P_newarr , sizeof(Data) * (v->size) );
+        free(v->array);
+        v -> array = P_newarr;
+        v -> size = size;
+    }
+    return;
+}
 
 ///
 /// @brief      { Remove an item from the vector's storage at index 
@@ -72,7 +124,21 @@ void resize_Vector(struct Vector *v, size_t size) {}
 /// @param      v      { The vector }
 /// @param[in]  index  The index to remove
 ///
-void remove_Vector(struct Vector *v, size_t index) {}
+void remove_Vector(struct Vector *v, size_t index) {
+    (v->array)[index] = 0;
+    (v->used)[index] = false;
+    if(v->len == index){
+        size_t ans = 0;
+        for(int i=index-1 ; i>=0 ; i--){
+            if((v->used)[i]){
+                ans = i;
+                break;
+            }
+        }
+        v->len = ans;
+    }
+    return ;
+}
 
 ///
 /// @brief      { Remove all items from vector storage. 
@@ -82,11 +148,33 @@ void remove_Vector(struct Vector *v, size_t index) {}
 ///
 /// @param      v     { The vector to be cleared. }
 ///
-void clear_Vector(struct Vector *v) {}
+void clear_Vector(struct Vector *v) {
+    memset(v->array,0,v->size);
+    memset(v->used,false,v->size);
+    v->len = 0;
+    return ;
+}
 
 ///
 /// @brief      Pretty prints contents of the vector's array and used array.
 ///
 /// @param      v     { parameter_description }
 ///
-void print_Vector(Vector *v) {}
+void print_Vector(Vector *v) {
+    const int sz = v->size;
+    printf("vector's array:\n");
+    for(int i=0;i<sz;i++){
+        if(i!=0){
+            printf(",");
+        }
+        printf("%d",(v->array)[i]);
+    }
+    printf("\nvector's used:\n");
+    for(int i=0;i<sz;i++){
+        if(i!=0){
+            printf(",");
+        }
+        printf("%d",(v->used)[i]);
+    }
+    return ;
+}

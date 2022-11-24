@@ -1,7 +1,4 @@
-SOURCE_FILES=list.c queue.c stack.c vector.c 
-HEADER_PATH=include/datastructs
-HEADER_FILES=$(HEADER_PATH)/list.c $(HEADER_PATH)/queue.c $(HEADER_PATH)/stack.c $(HEADER_PATH)/vector.c 
-SUBMIT_FILES=$(SOURCE_FILES) $(HEADER_FILES) grading.make Makefile README.md test.c
+SUBMIT_FILES=functions.c functions.h Makefile solutions.a test.c
 
 # Create a directory for submission files
 $(USER):

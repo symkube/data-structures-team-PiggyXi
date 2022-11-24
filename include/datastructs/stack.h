@@ -12,7 +12,7 @@ typedef uint64_t Data;
 
 typedef struct StackNode {
   Data value;
-  struct StackNode *next;
+  StackNode *next;
 } StackNode;
 
 typedef struct Stack {
@@ -28,9 +28,9 @@ Stack *new_Stack();
 void del_Stack(Stack *s);
 Stack *copy_Stack(Stack *s);
 
-void clear_Stack(Stack *s);
-void push_Stack(Stack *s, Data d);
-Data pop_Stack(Stack *s);
-Data peek_Stack(Stack *s);
+void clear(Stack *s);
+void push(Stack *s, Data d);
+Data pop(Stack *s);
+Data peek(Stack *s);
 
 #endif // DATASTRUCTS_STACK_H
