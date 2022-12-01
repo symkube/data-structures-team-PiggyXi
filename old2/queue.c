@@ -66,7 +66,7 @@ Queue *new_Queue() {
 /// @param      s     { A pointer to the queue to be deleted }
 ///
 void del_Queue(Queue *q) { 
-    clear_Queue(q);
+    clear(q);
     free(q);
     return; 
 }
@@ -89,7 +89,7 @@ Queue *copy_Queue(Queue *q) {
         return P_que;
     }else{
         do{
-            enqueue_Queue(P_que,(now->next)->value);
+            enqueue(P_que,now->next);
         }while(now==q->tail);
     }
     return P_que; 
@@ -102,13 +102,10 @@ Queue *copy_Queue(Queue *q) {
 ///
 /// @param      q     { A pointer to the queue to be cleared. }
 ///
-void clear_Queue(Queue *q) { 
+void clear(Queue *q) { 
     if(q->length>0){
-        dequeue_Queue(q);
+        dequeue(q);
     }
-    q->length = 0;
-    q->head = NULL;
-    q->tail = NULL;
     return; 
 }
 
@@ -120,10 +117,10 @@ void clear_Queue(Queue *q) {
 /// @param      q     { A pointer to the queue }
 /// @param[in]  d     { The value to be placed in the node }
 ///
-void enqueue_Queue(Queue *q, Data d) {
+void enqueue(Queue *q, Data d) {
     q->length+=1;
     QueueNode* P_qn = new_QueueNode(d);
-    if(q->head==NULL){
+    if(q->head==null){
         q->head = P_qn;
         q->tail = P_qn;
         return ;
@@ -142,7 +139,7 @@ void enqueue_Queue(Queue *q, Data d) {
 ///
 /// @return     { The data value in the popped node. }
 ///
-Data dequeue_Queue(Queue *q) { 
+Data dequeue(Queue *q) { 
     q->length-=1;
     if(q->length==0){
         q->tail = NULL;
@@ -161,6 +158,6 @@ Data dequeue_Queue(Queue *q) {
 ///
 /// @return     { The data value in the node at the front of the queue. }
 ///
-Data peek_Queue(Queue *q) { 
+Data peek(Queue *q) { 
     return q->head->value; 
 }

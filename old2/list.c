@@ -1,7 +1,6 @@
 #include "datastructs/list.h"
 #include <stddef.h>
 #include <stdlib.h>
-#include <stdio.h>
 
 ///
 /// @brief      { Create a new node, containing specified data }
@@ -11,14 +10,14 @@
 /// @return     { Return a pointer to the newly created node on success, 
 ///               or a null pointer on failure. }
 ///
-Node *new_Node(Data d) { 
+Node *new_Node(Data *d) { 
     Node * P_nd;
     P_nd = (Node *)malloc(sizeof(Node));
     if(P_nd == NULL){
         return NULL;
     }
-    P_nd -> data = d;
-    P_nd -> next = P_nd ->prev = NULL;
+    P_nd -> data = *d;
+    P_nd -> next = P_nd ->prev = P_nd;
     return P_nd; 
 }
 
@@ -27,9 +26,9 @@ Node *new_Node(Data d) {
 ///
 /// @param      n     { The node to be deleted. If n is null, no operation is performed. }
 ///
-void *del_Node(Node *n) { 
+void del_Node(Node *n) { 
     if(n==NULL){
-        return NULL;
+        return;
     }else{
         free(n);
     }
@@ -80,7 +79,6 @@ void *del_List(List *l) {
     if(l==NULL){
         return NULL;
     }
-    int x = 0;
     Node *now = l -> head;
     if(now==NULL){
         free(l);
@@ -89,7 +87,7 @@ void *del_List(List *l) {
             const Node * nxt = now -> next;
             free(now);
             now = nxt;
-        }while(now!= l->tail);
+        }while(now!= l -> tail);
     }
     return NULL; 
 }
@@ -189,7 +187,6 @@ List *insert_Node(List *l, Node *n, Node *pos) {
         pos->prev->next = n;
         pos->prev = n;
     }
-    return l;
 }
 
 ///
@@ -200,7 +197,7 @@ List *insert_Node(List *l, Node *n, Node *pos) {
 ///
 /// @return     { A pointer to the modified list }
 ///
-List *append_Node(List *l, Node *n) { 
+List *append_Node(List *l, Node *n); { 
     if( l->head == NULL ){
         l->head = n;
         l->tail = n;
@@ -208,7 +205,6 @@ List *append_Node(List *l, Node *n) {
         n->prev = l->tail;
         l->tail->next = n;
         l->tail = n;
-        n->next = l->head;
     }
     return l; 
 }
@@ -229,10 +225,10 @@ List *remove_Node(List *l, Node *pos) {
         l->tail = pos->prev;
     }
     if(pos->prev!=NULL){
-        pos->prev->next = pos->next;
+        pos->prev = pos->next;
     }
     if(pos->next!=NULL){
-        pos->next->prev = pos->prev;
+        pos->next = pos->prev;
     }
     del_Node(pos);
     return l; 
@@ -245,7 +241,7 @@ List *remove_Node(List *l, Node *pos) {
 /// @param      n     { The node to be printed }
 ///
 void print_Node(Node* n) {
-    printf("ADDRESS:%p, data:%lu, PREV_ADDRESS:%p, NEXT_ADDRESS:%p\n",n,n->data,n->prev,n->next);
+    printf("ADDRESS:%p, data:%ulld, PREV_ADDRESS:%p, NEXT_ADDRESS:%p\n",n,n->data,n->prev,n->next);
     return ;
 }
 

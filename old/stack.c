@@ -17,7 +17,7 @@ StackNode *new_StackNode(Data d) {
     }
     P_sn->value = d;
     P_sn->next = NULL;
-    return P_sn; 
+    return P_qn; 
 }
 
 ///
@@ -65,7 +65,7 @@ Stack *new_Stack() {
 /// @param      s     { A pointer to the stack to be deleted }
 ///
 void del_Stack(Stack *s) {
-    clear_Stack(s);
+    clear(s);
     free(s);
     return; 
 }
@@ -95,8 +95,8 @@ Stack *copy_Stack_half(Stack *s) {
         return P_stk;
     }else{
         do{
-            push_Stack(P_stk,now->value);
-        }while(now->next!=NULL);
+            push(P_que,now->next);
+        }while(now==q->tail);
     }
     return P_stk; 
 }
@@ -109,13 +109,11 @@ Stack *copy_Stack_half(Stack *s) {
 ///
 /// @param      s     { A pointer to the stack to be cleared. }
 ///
-void clear_Stack(Stack *s) {
+void clear(Stack *s) {
     if(s->length>0){
-        pop_Stack(s);
+        pop(s);
     }
-    s->length = 0;
-    s->top = NULL;
-    return ; 
+    return; 
 }
 
 
@@ -127,7 +125,7 @@ void clear_Stack(Stack *s) {
 /// @param      s     { A pointer to the stack }
 /// @param[in]  d     { The value to be placed in the node }
 ///
-void push_Stack(Stack *s, Data d) { 
+void push(Stack *s, Data d) { 
     s->length++;
     StackNode * now = new_StackNode(d);
     now->next = s->top;
@@ -143,9 +141,8 @@ void push_Stack(Stack *s, Data d) {
 ///
 /// @return     { The data value in the popped node. }
 ///
-Data pop_Stack(Stack *s) { 
+Data pop(Stack *s) { 
     s->length--;
-    //printf("pop:%d\n",s->length);
     StackNode * now = s->top;
     Data ans = now->value;
     s->top = now->next;
@@ -160,6 +157,6 @@ Data pop_Stack(Stack *s) {
 ///
 /// @return     { The data value in the node at the top of the stack. }
 ///
-Data peek_Stack(Stack *s) { 
+Data peek(Stack *s) { 
     return s->top->value; 
 }

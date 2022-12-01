@@ -1,8 +1,6 @@
 #include "datastructs/vector.h"
 #include <stddef.h>
 #include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 
 ///
 /// @brief      { Creates a new vector}
@@ -66,11 +64,10 @@ Vector *copy_Vector(Vector *v) {
 ///               or the element is not marked used.) }
 ///
 Data *at_Vector(struct Vector *v, size_t index) { 
-    //printf("\n :: %d %d %d :: \n",index,v->len,(v->used)[index]);
-    if( index > (v->len) || (v->used)[index] == false ){
+    if( index >= (v->len) || (v->used)[index] == false ){
         return NULL;
     }
-    return (v->array)+index; 
+    return (v->array)[index]; 
 }
 
 ///
@@ -91,8 +88,8 @@ void insert_Vector(struct Vector *v, Data d, size_t index) {
     }
     (v->array)[index] = d;
     (v->used)[index] = true;
-    if((v->len)< index+1 ){
-        v->len = index+1;
+    if((v->len)< index ){
+        v->len = index;
     }
     return ;
 }
@@ -106,19 +103,14 @@ void insert_Vector(struct Vector *v, Data d, size_t index) {
 /// @param[in]  size  The new storage size
 ///
 void resize_Vector(struct Vector *v, size_t size) {
-    Data *P_newarr = malloc( sizeof(Data) * size );
-    bool *P_newusd = malloc( sizeof(bool) * size );
-    if( P_newarr == NULL || P_newusd == NULL ) {
+    Vector * P_newarr = malloc( sizeof(Data) * size );
+    if( P_newarr == NULL ) {
         exit(1);
     }else{
         memset(P_newarr , 0, sizeof(Data) * size );
         memcpy( v->array , P_newarr , sizeof(Data) * (v->size) );
         free(v->array);
         v -> array = P_newarr;
-        memset(P_newusd , false, sizeof(bool) * size );
-        memcpy( v->used , P_newusd , sizeof(bool) * (v->size) );
-        free(v->used);
-        v -> used = P_newusd;
         v -> size = size;
     }
     return;
@@ -175,7 +167,7 @@ void print_Vector(Vector *v) {
         if(i!=0){
             printf(",");
         }
-        printf("%ld",(v->array)[i]);
+        printf("%d",(v->array)[i]);
     }
     printf("\nvector's used:\n");
     for(int i=0;i<sz;i++){

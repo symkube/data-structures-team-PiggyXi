@@ -12,14 +12,14 @@ typedef uint64_t Data;
 
 typedef struct Node{
 	Data data;
-	struct Node *next, *prev;
+	Node *next, *prev;
 } Node;
 
 typedef struct List{
 	Node *head, *tail;
 } List;
 
-Node *new_Node(Data d);
+Node *new_Node(Data *d);
 void del_Node(Node *n);
 Node *copy_Node(Node *n);
 

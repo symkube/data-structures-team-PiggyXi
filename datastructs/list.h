@@ -20,7 +20,7 @@ typedef struct List{
 } List;
 
 Node *new_Node(Data d);
-void del_Node(Node *n);
+void *del_Node(Node *n);
 Node *copy_Node(Node *n);
 
 List *new_List();

@@ -52,7 +52,6 @@ void testVECTOR(void) {
   insert_Vector(myVector, 0xdeadbeef, 0);
   CU_ASSERT_EQUAL(myVector->array[0], 0xdeadbeef);
   CU_ASSERT_EQUAL(myVector->used[0], true);
-  //printf("\n==== %u ====\n",at_Vector(myVector, 0));
   CU_ASSERT_PTR_NOT_NULL_FATAL(at_Vector(myVector, 0));
   CU_ASSERT_EQUAL(*at_Vector(myVector, 0), 0xdeadbeef);
   sz = myVector->size;
@@ -62,8 +61,7 @@ void testVECTOR(void) {
 
   // Test insertions beyond initially allocated memory
   CU_ASSERT_EQUAL(myVector->size, 1);
-    printf("\n====%d====\n",myVector->len);
-  CU_ASSERT_EQUAL(myVector->len, 1);//
+  CU_ASSERT_EQUAL(myVector->len, 1);
   for (size_t i = 1; i < 10; ++i) {
     insert_Vector(myVector, (Data)i, i);
     CU_ASSERT_EQUAL(*at_Vector(myVector, i), i);
@@ -71,14 +69,14 @@ void testVECTOR(void) {
   sz = myVector->size;
   len = myVector->len;
   CU_ASSERT(sz >= 11);
-  CU_ASSERT(len == 10);//
+  CU_ASSERT(len == 10);
 
   // Test resizing
   resize_Vector(myVector, 2048);
   sz = myVector->size;
   len = myVector->len;
   CU_ASSERT(sz == 2048);
-  CU_ASSERT(len == 10);//
+  CU_ASSERT(len == 10);
 
   // Test removal
   remove_Vector(myVector, 3);
@@ -93,7 +91,7 @@ void testVECTOR(void) {
 
   // Test deletion
   del_Vector(myVector);
-  CU_ASSERT_PTR_NULL(myVector);//
+  CU_ASSERT_PTR_NULL(myVector);
 }
 
 void testLIST(void) {
@@ -107,41 +105,29 @@ void testLIST(void) {
   CU_ASSERT_PTR_NULL(myNode->prev);
   del_Node(myNode);
   CU_ASSERT_PTR_NULL(myNode);
-  printf("\n creation and deletion");
 
   // Test list creation
   myList = new_List();
   CU_ASSERT_PTR_NOT_NULL(myList);
-  printf("\n list creation");
+
   // Test list appending
   for (size_t i = 0; i < 10; ++i) {
-    Node* nn = new_Node((Data) i);
-    append_Node(myList, nn);
+    append_Node(myList, i);
   }
-  printf("\n list appending");
+
   // Check forward traversal
   Node *nptr = myList->head;
-  for (size_t i = 0; i < 10; ++i) {/////// "<="  ->   "<"
-    //printf("\n====i: %d %u ====\n",i,nptr);
+  for (size_t i = 0; i <= 10; ++i) {
     CU_ASSERT_EQUAL(nptr->data, (Data)i);
-    //if(nptr!=NULL)//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     nptr = nptr->next;
   }
-  printf("\n forward traversal");
 
   // Check reverse traversal
   nptr = myList->tail;
-  for (int i = 9; i >= 0; --i) {/////// 10 -> 9
-    //printf(" i== %d \n",i);
+  for (size_t i = 10; i >= 0; --i) {
     CU_ASSERT_EQUAL(nptr->data, (Data)i);
     nptr = nptr->prev;
-    // if(i<-5){
-    //   int x;
-    //   scanf("%d",&x);
-    // }
   }
-
-  printf("\n reverse traversal");
 
   // Test list insertion
   // Before: (head) <-> nprev <-> nptr <-> nnext
@@ -154,9 +140,7 @@ void testLIST(void) {
   CU_ASSERT_PTR_EQUAL(myNode->prev, nprev);
   CU_ASSERT_PTR_EQUAL(myNode->next, nptr);
   CU_ASSERT_PTR_EQUAL(nprev->next, myNode);
-  //CU_ASSERT_EQUAL(nnext->prev, myNode); !!!!!!!!!!
-  CU_ASSERT_EQUAL(nnext->prev, nptr);
-  printf("\n list insertion");
+  CU_ASSERT_EQUAL(nnext->prev, myNode);
 
   // Test list removal
   // Before: nprev <-> myNode <-> nnext
@@ -167,11 +151,9 @@ void testLIST(void) {
   CU_ASSERT_PTR_EQUAL(nnext->prev, nprev);
   CU_ASSERT_PTR_EQUAL(nprev->next, nnext);
 
-  printf("\n list removal");
-
   // Test list deletion
-  void * pnt = del_List(myList);
-  CU_ASSERT_PTR_NULL(pnt);
+  del_List(myList);
+  CU_ASSERT_PTR_NULL(myList);
 }
 
 void testSTACK(void) {
@@ -197,7 +179,6 @@ void testSTACK(void) {
   // Clearing the Stack
   clear_Stack(myStack);
   CU_ASSERT_PTR_NOT_NULL(myStack);
-  printf("\n====%d====\n",myStack->length);
   CU_ASSERT_EQUAL(myStack->length, 0);
   CU_ASSERT_PTR_NULL(myStack->top);
 
@@ -219,8 +200,7 @@ void testQUEUE(void) {
     enqueue_Queue(myQueue, (Data)i);
   }
   CU_ASSERT_EQUAL(myQueue->length, 5);
-  printf("\n===%d===\n",peek_Queue(myQueue));
-  CU_ASSERT_EQUAL(peek_Queue(myQueue), (Data)4);//??????
+  CU_ASSERT_EQUAL(peek_Queue(myQueue), (Data)4);
 
   // Removing Elements from the Queue
   for (size_t i = 0; i < 2; ++i) {
@@ -232,7 +212,7 @@ void testQUEUE(void) {
   clear_Queue(myQueue);
   CU_ASSERT_PTR_NOT_NULL(myQueue);
   CU_ASSERT_EQUAL(myQueue->length, 0);
-  CU_ASSERT_PTR_NULL(myQueue->tail);
+  CU_ASSERT_PTR_NULL(myQueue->head);
 
   // Finalization
   del_Queue(myQueue);
@@ -270,8 +250,6 @@ int main(int argc, char *argv[]) {
   }
 
   CU_pSuite pSuite_queue = NULL;
-    pSuite_queue =
-      CU_add_suite("Suite_Queue", init_suite_queue, clean_suite_queue);
   if (NULL == pSuite_queue) {
     CU_cleanup_registry();
     return CU_get_error();
