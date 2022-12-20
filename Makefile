@@ -8,7 +8,7 @@ all: libdatastructs.a test
 %.o : %.c
 	$(CC) $(CFLAGS) $< -c
 
-libdatastructs.a: list.o stack.o vector.o queue.o
+libdatastructs.a: list.o stack.o vector.o queue.o tree.o
 	$(AR) $(ARFLAGS) $@ $^
 
 main:
